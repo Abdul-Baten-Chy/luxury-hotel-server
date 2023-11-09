@@ -12,8 +12,8 @@ const port = process.env.PORT || 5000
 // middleware
 app.use(cors({
   origin: [
-       'http://localhost:5173',
-       'http://localhost:5174',
+       'https://clientside-10.firebaseapp.com/',
+       'https://clientside-10.web.app/',
   ],
   
   credentials: true,
@@ -73,7 +73,7 @@ async function run() {
 
    })
 
-   app.get('/bookings', async(req,res)=>{
+   app.get('/bookings',verifyToken, async(req,res)=>{
     const user =req.query?.email;
     // console.log('token', req.cookies.token);
     const query = {user:req.query?.email}

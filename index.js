@@ -81,6 +81,15 @@ async function run() {
     res.send(result)
    })
 
+   app.delete('/bookings/:id', async(req, res)=>{
+      const productId = req.params.id
+      const query={_id:new ObjectId(productId)}
+      const result = await userCollection.deleteOne(query)
+      res.send(result)
+
+   })
+
+
   //  jwt goes here
 
   app.post('/jwt', async(req,res)=>{

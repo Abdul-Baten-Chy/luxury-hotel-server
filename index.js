@@ -55,6 +55,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const dataCollection = client.db("hotelData").collection("rooms");
+    const userCollection = client.db("hotelData").collection("users");
   
     //  all the get api goes here
     app.get('/rooms', async(req, res)=>{
@@ -72,16 +73,29 @@ async function run() {
 
    })
 
+   app.get('/bookings', async(req,res)=>{
+    const user =req.query?.email;
+    // console.log('token', req.cookies.token);
+    const query = {user:req.query?.email}
+    const result =await userCollection.find(query).toArray()
+    res.send(result)
+   })
+
   //  jwt goes here
 
   app.post('/jwt', async(req,res)=>{
       
     const user = req.body;
-    console.log(user);
     const token = jwt.sign(user,secrete, {expiresIn:'1h'})
     res
     .cookie('token', token, {httpOnly:true, secure:false})
     .send({success:true})
+  })
+
+  app.post('/bookings', async(req, res)=>{
+    user=req.body;
+    const result = await userCollection.insertOne(user)
+    res.send(result)
   })
 
 
